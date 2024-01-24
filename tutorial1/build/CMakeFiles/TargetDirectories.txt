@@ -1,3 +1,0 @@
-/home/adachi/GtsamStudyGroup/tutorial1/build/CMakeFiles/tutorial1.dir
-/home/adachi/GtsamStudyGroup/tutorial1/build/CMakeFiles/edit_cache.dir
-/home/adachi/GtsamStudyGroup/tutorial1/build/CMakeFiles/rebuild_cache.dir
