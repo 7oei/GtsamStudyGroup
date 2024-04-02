@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Ellipse
+from matplotlib.patches import Ellipse, Circle
 
 # ノードの位置と方向
 nodes = {
@@ -30,17 +30,19 @@ covariances = {
 
 def plot_ellipse(ax, mean, covariance, color):
     """ 楕円をプロットする関数 """
-    # 2x2の共分散行列に対してのみ固有値分解を行う
     cov_2x2 = covariance[0:2, 0:2]
     eigenvalues, eigenvectors = np.linalg.eig(cov_2x2)
     
-    # 楕円のパラメータを計算
     angle = np.degrees(np.arctan2(*eigenvectors[:,0][::-1]))
     width, height = 2 * np.sqrt(eigenvalues)
     
-    # 楕円を描画
     ellipse = Ellipse(xy=mean, width=width, height=height, angle=angle, color=color, alpha=0.5)
     ax.add_patch(ellipse)
+
+def plot_circle(ax, center, radius, color):
+    """ 円をプロットする関数 """
+    circle = Circle(center, radius, color=color, fill=False)
+    ax.add_patch(circle)
 
 # グラフのプロット
 fig, ax = plt.subplots()
@@ -48,6 +50,7 @@ for node_id, node_data in nodes.items():
     x, y = node_data["position"]
     ax.plot(x, y, 'o', label=f"Node {node_id}")
     plot_ellipse(ax, (x, y), covariances[node_id], 'blue')
+    plot_circle(ax, (x, y), 0.1, 'red')  # 円をプロット
 
 # エッジ（ファクター）のプロット
 ax.plot([nodes["1"]["position"][0], nodes["2"]["position"][0]], [nodes["1"]["position"][1], nodes["2"]["position"][1]], 'k-')
@@ -60,5 +63,6 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.legend()
 ax.set_title('GTSAM Factor Graph Visualization')
+ax.set_aspect('equal')  # 縦横のスケールを1:1に設定
 
 plt.show()
